@@ -1,5 +1,5 @@
 guid.cc
-#######
+=======
 
 This repository belongs to the implementation of [guid.cc][1], a service that
 allows users to store arbitrary data on a [guid][2] key.
