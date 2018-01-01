@@ -10,12 +10,22 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
+securityDefinitions:
+  auth0:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://pabuco.auth0.com/authorize
+    tokenUrl: https://pabuco.auth0.com/oauth/token
+    scopes: {}
+security:
+- auth0: []
 paths:
   /guid:
     get:
       tags: [GuidGenerator]
       operationId: NewVersion4Guid
       summary: Get a new version 4 uuid
+      security: []
       responses:
         200:
           description: OK
@@ -25,6 +35,7 @@ paths:
       tags: [GuidGenerator]
       operationId: NewGuid
       summary: Return a guid based on a request
+      security: []
       parameters:
       - in: body
         name: request
@@ -36,7 +47,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Guid'
-
   /store:
     post:
       tags: [KeyValueStore]
@@ -63,6 +73,7 @@ paths:
       tags: [KeyValueStore]
       summary: Get object by key
       operationId: GetObjectByKey
+      security: []
       parameters:
       - $ref: '#/parameters/IfModifiedSince'
       - $ref: '#/parameters/Page'
@@ -1212,8 +1223,6 @@ responses:
     description: The server is up, but is unable to respond.
     schema:
       $ref: '#/definitions/RetryError'
-securityDefinitions: {}
-security: []
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /leblanc-codes/guid.cc/0.1.0
