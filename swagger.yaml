@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
   version: '0.1.0'
-  title: 'guid.cc API Specification'
-  description: 'Stores values on UUID keys. Version 1 and 2 UUIDs are rejected unless the first octet of the node id is set to 1, e.g. XXXXXXXX-XXXX-VXXX-XXXX-1XXXXXXXXXXX. Creates version 5 UUIDs for actor identifiers. Creates version 3 UUIDs for non-actor objets.'
+  title: guid.cc API Specification
+  description: Stores values on UUID keys. Version 1 and 2 UUIDs are rejected unless the first octet of the node id is set to 1, e.g. XXXXXXXX-XXXX-VXXX-XXXX-1XXXXXXXXXXX. Creates version 5 UUIDs for actor identifiers. Creates version 3 UUIDs for non-actor objects.
   contact:
     name: LeBlanc Codes, LLC
     url: https://github.com/demosdemon/guid.cc/issues
@@ -11,6 +11,48 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
+  /guid:
+    get:
+      tags: [GuidGenerator]
+      operationId: NewVersion4Guid
+      summary: Get a new version 4 uuid
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Guid'
+    post:
+      tags: [GuidGenerator]
+      operationId: NewGuid
+      summary: Return a guid based on a request
+      parameters:
+      - in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/NewGuidRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Guid'
+
+  /store:
+    post:
+      tags: [KeyValueStore]
+      operationId: AddNewObjectRandomKey
+      summary: Add a new object, assign a random key
+      parameters:
+      - in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/GuidObject'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidObject'
   /{guid}:
     parameters:
     - $ref: '#/parameters/ResourceKey'
@@ -144,6 +186,35 @@ paths:
           $ref: '#/responses/500InternalServerError'
         503:
           $ref: '#/responses/503ServiceUnavailable'
+  /{guid}/rekey:
+    post:
+      tags: [KeyValueStore]
+      operationId: ChangeObjectKey
+      summary: Change an object's key in-place
+      parameters:
+      - $ref: '#/parameters/ResourceKey'
+      - in: query
+        name: newKey
+        required: false
+        type: string
+        format: uuid
+        description: The new key to use, one will be generated otherwise
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidObject'
+      
+  /{guid}/seize:
+    post:
+      tags: [Permissions]
+      operationId: TakeOwnershipOfObject
+      summary: Take ownership of object at key
+      parameters:
+      - $ref: '#/parameters/ResourceKey'
+      responses:
+        200:
+          $ref: '#/responses/SuccessMessage'
   /{guid}/acl:
     parameters:
     - $ref: '#/parameters/ResourceKey'
@@ -333,8 +404,97 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/OperationLog'
-  
+  /{guid}/link/{child}:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - $ref: '#/parameters/ChildKey'
+    get:
+      tags: [Collection]
+      operationId: GetChild
+      summary: Select a child element
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/KeyIndexItem'
+    post:
+      tags: [Collection]
+      operationId: AddChild
+      summary: Add child to collection
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidContainer'
+    delete:
+      tags: [Collection]
+      operationId: RemoveChild
+      summary: Remove child from collection
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidContainer'
+  /{guid}/create/container:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/create/document:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/create/blob:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/create/link:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/create/service:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/create/group:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/create/user:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/query:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/properties:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+  /{guid}/properties/{name}:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - in: path
+      name: name
+      required: true
+      type: string
+    # get put(overwrite) post(create or error) delete patch(apply json+patch)
+
 definitions:
+  Guid:
+    type: string
+    format: uuid
+    description: The nom de plume
+  NewGuidRequest:
+    type: object
+    required:
+    - version
+    properties:
+      version:
+        type: integer
+        enum:
+        - 3
+        - 4
+        - 5
+        default: 3
+      namespace:
+        type: string
+        default: 'https://guid.cc/'
+        description: required if `version in (3, 5)`
+      seed:
+        type: string
+        description: required if `version in (3, 5)`
   DirectInwardEntity:
     type: object
     properties:
@@ -515,8 +675,7 @@ definitions:
       - key
       properties:
         key:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         etag:
           description: Use for concurrency checks, null to skip
           type: string
@@ -539,11 +698,9 @@ definitions:
     - type: object
       properties:
         resource:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         owner:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         inherit:
           type: boolean
           default: true
@@ -558,8 +715,7 @@ definitions:
     - type: object
       properties:
         actor:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         deny:
           type: boolean
           default: false
@@ -577,11 +733,9 @@ definitions:
           type: string
           format: date-time
         actor:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         resource:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         responseCode:
           type: integer
   GuidObject:
@@ -593,9 +747,7 @@ definitions:
       discriminator: type
       properties:
         guid:
-          type: string
-          format: uuid
-          readOnly: true
+          $ref: '#/definitions/Guid'
         parents:
           $ref: '#/definitions/ActorIndex'
         etag:
@@ -682,8 +834,7 @@ definitions:
           readOnly: true
           description: The computed URI to the blob download
         blob:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         notBefore:
           type: string
           format: date-time
@@ -853,8 +1004,7 @@ definitions:
     - type: object
       properties:
         service:
-          type: string
-          format: uuid
+          $ref: '#/definitions/Guid'
         notBefore:
           type: string
           format: date-time
@@ -937,6 +1087,13 @@ parameters:
     type: string
     format: uuid
     description: The resource key
+  ChildKey:
+    in: path
+    name: child
+    required: true
+    type: string
+    format: uuid
+    description: The child key
   IfMatch:
     in: header
     name: If-Match
