@@ -73,7 +73,6 @@ paths:
       tags: [KeyValueStore]
       summary: Get object by key
       operationId: GetObjectByKey
-      security: []
       parameters:
       - $ref: '#/parameters/IfModifiedSince'
       - $ref: '#/parameters/Page'
@@ -215,7 +214,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/GuidObject'
-      
   /{guid}/seize:
     post:
       tags: [Permissions]
