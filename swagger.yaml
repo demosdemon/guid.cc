@@ -1,0 +1,1064 @@
+swagger: '2.0'
+info:
+  version: '0.1.0'
+  title: 'guid.cc API Specification'
+  description: 'Stores values on UUID keys. Version 1 and 2 UUIDs are rejected unless the first octet of the node id is set to 1, e.g. XXXXXXXX-XXXX-VXXX-XXXX-1XXXXXXXXXXX. Creates version 5 UUIDs for actor identifiers. Creates version 3 UUIDs for non-actor objets.'
+  contact:
+    name: LeBlanc Codes, LLC
+    url: https://github.com/demosdemon/guid.cc/issues
+    email: contact@leblanc.codes
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /{guid}:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - $ref: '#/parameters/IfMatch'
+    - $ref: '#/parameters/IfNoneMatch'
+    - $ref: '#/parameters/IfUnmodifiedSince'
+    get:
+      tags: [KeyValueStore]
+      summary: Get object by key
+      operationId: GetObjectByKey
+      parameters:
+      - $ref: '#/parameters/IfModifiedSince'
+      - $ref: '#/parameters/Page'
+      - $ref: '#/parameters/Limit'
+      - $ref: '#/parameters/Sort'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidObject'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        404:
+          $ref: '#/responses/404NotFound'
+        410:
+          $ref: '#/responses/410Gone'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        451:
+          $ref: '#/responses/451Censored'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+    post:
+      tags: [KeyValueStore]
+      summary: New object with explicit key
+      operationId: AddObjectByKey
+      parameters:
+      - in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/GuidObject'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidObject'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        409:
+          $ref: '#/responses/409Conflict'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+    put:
+      tags: [KeyValueStore]
+      summary: Update existing object by key
+      operationId: UpdateObjectByKey
+      parameters:
+      - in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/GuidObject'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidObject'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        409:
+          $ref: '#/responses/409Conflict'
+        417:
+          $ref: '#/responses/417PreconditionFailed'
+        428:
+          $ref: '#/responses/428PreconditionRequired'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+    delete:
+      tags: [KeyValueStore]
+      summary: Delete object with key
+      operationId: DeleteObjectByKey
+      responses:
+        200:
+          $ref: '#/responses/SuccessMessage'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        409:
+          $ref: '#/responses/409Conflict'
+        417:
+          $ref: '#/responses/417PreconditionFailed'
+        428:
+          $ref: '#/responses/428PreconditionRequired'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+  /{guid}/acl:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - $ref: '#/parameters/IfMatch'
+    - $ref: '#/parameters/IfNoneMatch'
+    - $ref: '#/parameters/IfUnmodifiedSince'
+    get:
+      tags: [Permissions]
+      operationId: GetObjectAccessControlList
+      summary: Get access control list for a key
+      parameters:
+      - $ref: '#/parameters/IfModifiedSince'
+      - in: query
+        name: inherit
+        type: boolean
+        default: false
+        description: include inherited permissions
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessControlList'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        404:
+          $ref: '#/responses/404NotFound'
+        410:
+          $ref: '#/responses/410Gone'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+    put:
+      tags: [Permissions]
+      operationId: UpdateObjectAccessControlList
+      summary: Replace an object's access control list
+      parameters:
+      - in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/AccessControlList'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessControlList'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        409:
+          $ref: '#/responses/409Conflict'
+        417:
+          $ref: '#/responses/417PreconditionFailed'
+        428:
+          $ref: '#/responses/428PreconditionRequired'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+    post:
+      tags: [Permissions]
+      operationId: InsertObjectAccessControlItem
+      summary: Insert a new access control item record
+      parameters:
+      - in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/AccessControlListItem'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessControlListItem'
+        400:
+          $ref: '#/responses/400BadRequest'
+        401:
+          $ref: '#/responses/401Unauthorized'
+        402:
+          $ref: '#/responses/402PaymentRequired'
+        403:
+          $ref: '#/responses/403Forbidden'
+        409:
+          $ref: '#/responses/409Conflict'
+        429:
+          $ref: '#/responses/429TooManyRequests'
+        500:
+          $ref: '#/responses/500InternalServerError'
+        503:
+          $ref: '#/responses/503ServiceUnavailable'
+  /{guid}/acl/{itemid}:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - $ref: '#/parameters/IfMatch'
+    - $ref: '#/parameters/IfNoneMatch'
+    - $ref: '#/parameters/IfUnmodifiedSince'
+    - in: path
+      name: itemid
+      required: true
+      type: integer
+      format: int64
+    get:
+      tags: [Permissions]
+      operationId: GetIndividualAclItem
+      summary: Select an individual acl record
+      parameters:
+      - $ref: '#/parameters/IfModifiedSince'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessControlListItem'
+    put:
+      tags: [Permissions]
+      operationId: UpdateIndividualAclItem
+      summary: Update an individual acl record
+      parameters:
+      - in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/AccessControlListItem'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/AccessControlListItem'
+    delete:
+      tags: [Permissions]
+      operationId: DeleteIndividualAclItem
+      summary: Delete an individual acl record
+      responses:
+        200:
+          $ref: '#/responses/SuccessMessage'
+  /{guid}/history:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - $ref: '#/parameters/IfMatch'
+    - $ref: '#/parameters/IfNoneMatch'
+    - $ref: '#/parameters/IfUnmodifiedSince'
+    get:
+      tags: [Audit]
+      operationId: GetObjectOperationLog
+      summary: Return an index of operation log items
+      parameters:
+      - $ref: '#/parameters/IfModifiedSince'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ItemIndex'
+  /{guid}/history/{itemid}:
+    parameters:
+    - $ref: '#/parameters/ResourceKey'
+    - $ref: '#/parameters/IfMatch'
+    - $ref: '#/parameters/IfNoneMatch'
+    - $ref: '#/parameters/IfUnmodifiedSince'
+    - in: path
+      name: itemid
+      required: true
+      type: integer
+      format: int64
+    get:
+      tags: [Audit]
+      operationId: GetObjectOperationLogItem
+      summary: Get a log item from the operation log
+      parameters:
+      - $ref: '#/parameters/IfModifiedSince'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/OperationLog'
+  
+definitions:
+  DirectInwardEntity:
+    type: object
+    properties:
+      uri:
+        type: string
+        format: uri
+        readOnly: true
+        description: The URI directly to this entity
+  Operation:
+    type: string
+    description: >
+      Operation:
+        * `Meta/*` - aren't settable, generated via heuristics
+        * `Meta/Anonymous` - used by actions that expect anonymous users, (i.e., create user)
+        * `Meta/Superuser` - root level user, applied to all objects
+        * `Meta/Owner` - applied to all objects, except the root container
+        * `Meta/Self` - applied to all group, user, and service objects
+        * `GuidObject/*` - glob applies all permissions including subtypes
+        * `GuidObject/BrowseObject` - show in container index, implies ReadMetadata
+        * `GuidObject/ReadObject` - read the object value(s), not otherwise restricted
+        * `GuidContainer/RetainOwnership` - the entity with the `RetainOwnership`
+        permission is assigned ownership. e.g., group `foo` has `RetainOwnership`
+        defined on container `c`, user `bar` is a member of group `foo` but only
+        inherits `RetainOwnership` through group `foo`, user `bar` adds *an item*
+        to the container `c`, ownership is assigned to group `foo`, user `bar`
+        maintains ownership as long as it remains a member of group `foo`. However,
+        if user `bar` does have `RetainOwnership` independently defined on container
+        `c`, then ownership is assigned to user `bar` itself.
+        * `GuidContainer/CreateOrphan` - otherwise error when unlinking from the last parent
+        * `GuidDocument/QueryDocument` - execute jmespath query on document
+        * `GuidDocument/IndexDocument` - create a relational index, implies QueryDocument
+    enum:
+    - Meta/Anonymous
+    - Meta/Superuser
+    - Meta/Owner
+    - Meta/Self
+    - GuidObject/*
+    - GuidObject/TakeOwnership
+    - GuidObject/UpdateKey
+    - GuidObject/BrowseObject
+    - GuidObject/ReadMetadata
+    - GuidObject/UpdateMetadata
+    - GuidObject/ReadAccessControlList
+    - GuidObject/UpdateAccessControlList
+    - GuidObject/DisableAccessControlInheritance
+    - GuidObject/ReadObject
+    - GuidObject/DeleteObject
+    - GuidObject/ViewHistory
+    - GuidContainer/*
+    - GuidContainer/RetainOwnership
+    - GuidContainer/LinkChild
+    - GuidContainer/UnlinkChild
+    - GuidContainer/CreateOrphan
+    - GuidContainer/CreateChild/*
+    - GuidContainer/CreateChild/GuidContainer
+    - GuidContainer/CreateChild/GuidDocument
+    - GuidContainer/CreateChild/GuidBlob
+    - GuidContainer/CreateChild/GuidLink
+    - GuidContainer/CreateChild/GuidService
+    - GuidContainer/CreateChild/GuidGroup
+    - GuidContainer/CreateChild/GuidUser
+    - GuidDocument/*
+    - GuidDocument/ReadSchema
+    - GuidDocument/UpdateSchema
+    - GuidDocument/OverrideSchema
+    - GuidDocument/QueryDocument
+    - GuidDocument/IndexDocument
+    - GuidDocument/AddProperty
+    - GuidDocument/UpdateProperty
+    - GuidDocument/DeleteProperty
+    - GuidBlob/*
+    - GuidBlob/AppendBlob
+    - GuidBlob/ReplaceBlob
+    - GuidBlob/UpdateProperties
+    - GuidBlob/DownloadToken/*
+    - GuidBlob/DownloadToken/List
+    - GuidBlob/DownloadToken/Issue
+    - GuidBlob/DownloadToken/IssueIndefinite
+    - GuidBlob/DownloadToken/Revoke
+    - GuidLink/*
+    - GuidLink/UpdateDestination
+    - GuidLink/ReadMetrics
+    - GuidLink/ReadAccessLog
+    - GuidActor/*
+    - GuidActor/ReadProfile
+    - GuidActor/UpdateProfile
+    - GuidActor/ReadStatus
+    - GuidActor/UpdateStatus
+    - GuidActor/SendMessage
+    - GuidService/*
+    - GuidService/ReadSecret
+    - GuidService/CreateSecret
+    - GuidService/DeleteSecret
+    - GuidGroup/*
+    - GuidGroup/AddMember
+    - GuidGroup/RemoveMember
+    - GuidUser/*
+    - GuidUser/ReadEmail
+    - GuidUser/UpdateEmail
+    - GuidUser/UpdatePassword
+    - GuidUser/DecryptSecrets
+    - GuidUser/UpdateSecrets
+  GuidObjectType:
+    type: string
+    enum:
+    # - GuidObject
+    - GuidContainer
+    - GuidDocument
+    - GuidBlob
+    - GuidLink
+    # - GuidActor
+    - GuidService
+    - GuidGroup
+    - GuidUser
+  ItemIndex:
+    type: object
+    properties:
+      metadata:
+        $ref: '#/definitions/IndexMetadata'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/IndexItem'
+  ObjectIndex:
+    type: object
+    properties:
+      metadata:
+        $ref: '#/definitions/IndexMetadata'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/KeyIndexItem'
+  ActorIndex:
+    type: object
+    properties:
+      metadata:
+        $ref: '#/definitions/IndexMetadata'
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/ActorIndexItem'
+  IndexMetadata:
+    type: object
+    readOnly: true
+    properties:
+      page:
+        type: integer
+      perPage:
+        type: integer
+      pageCount:
+        type: integer
+      totalCount:
+        type: integer
+      links:
+        $ref: '#/definitions/StringMap'
+  IndexItem:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        type:
+          description: |
+            This is not a `GuidObjectType` because not all `DirectInwardEntity`s
+            are `GuidObject` rooted elements. See `KeyIndexItem`.
+          type: string
+        lastModified:
+          type: string
+          format: date-time
+          readOnly: true
+        # metadata of the entity itself, not any relationship
+        metadata:
+          $ref: '#/definitions/StringMap'
+  KeyIndexItem:
+    allOf:
+    - $ref: '#/definitions/IndexItem'
+    - type: object
+      required:
+      - key
+      properties:
+        key:
+          type: string
+          format: uuid
+        etag:
+          description: Use for concurrency checks, null to skip
+          type: string
+        type:
+          $ref: '#/definitions/GuidObjectType'
+  ActorIndexItem:
+    allOf:
+    - $ref: '#/definitions/KeyIndexItem'
+    - type: object
+      properties:
+        status:
+          $ref: '#/definitions/ActorStatus'
+  GenericObject:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/GenericObject'
+  AccessControlList:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        resource:
+          type: string
+          format: uuid
+        owner:
+          type: string
+          format: uuid
+        inherit:
+          type: boolean
+          default: true
+          description: whether or not this resource inherits the ACLs from its parents
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/AccessControlListItem'
+  AccessControlListItem:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        actor:
+          type: string
+          format: uuid
+        deny:
+          type: boolean
+          default: false
+          description: override a parent acl and deny this actor this permission
+        operation:
+          $ref: '#/definitions/Operation'
+  OperationLog:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        operation:
+          $ref: '#/definitions/Operation'
+        datetime:
+          type: string
+          format: date-time
+        actor:
+          type: string
+          format: uuid
+        resource:
+          type: string
+          format: uuid
+        responseCode:
+          type: integer
+  GuidObject:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      required:
+      - type
+      discriminator: type
+      properties:
+        guid:
+          type: string
+          format: uuid
+          readOnly: true
+        parents:
+          $ref: '#/definitions/ActorIndex'
+        etag:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        lastModified:
+          type: string
+          format: date-time
+          readOnly: true
+        type:
+          $ref: '#/definitions/GuidObjectType'
+        metadata:
+          $ref: '#/definitions/StringMap'
+  GuidContainer:
+    allOf:
+    - $ref: '#/definitions/GuidObject'
+    - $ref: '#/definitions/ObjectIndex'
+  GuidDocument:
+    allOf:
+    - $ref: '#/definitions/GuidObject'
+    - type: object
+      required:
+      - document
+      properties:
+        document:
+          $ref: '#/definitions/GenericObject'
+        schema:
+          $ref: '#/definitions/GenericObject'
+        validateSchema:
+          type: boolean
+          default: true
+  DataHashes:
+    type: object
+    properties:
+      md5:
+        type: string
+        format: byte
+      sha1:
+        type: string
+        format: byte
+      sha256:
+        type: string
+        format: byte
+      sha512:
+        type: string
+        format: byte
+  BlobMetadata:
+    type: object
+    required:
+    - contentType
+    - contentLength
+    properties:
+      filename:
+        type: string
+      contentType:
+        type: string
+      contentLength:
+        type: integer
+      encoding:
+        type: string
+      dataHashes:
+        $ref: '#/definitions/DataHashes'
+  GuidBlob:
+    allOf:
+    - $ref: '#/definitions/GuidObject'
+    - $ref: '#/definitions/BlobMetadata'
+    - type: object
+      properties:
+        downloadTokens:
+          type: array
+          items:
+            $ref: '#/definitions/DownloadToken'
+  DownloadToken:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        downloadUri:
+          type: string
+          format: uri
+          readOnly: true
+          description: The computed URI to the blob download
+        blob:
+          type: string
+          format: uuid
+        notBefore:
+          type: string
+          format: date-time
+        notAfter:
+          type: string
+          format: date-time
+        ipNetworks:
+          type: array
+          items:
+            type: string
+          description: array of ip networks in CIDR notation (127.0.0.1/32)
+        hash:
+          type: string
+          format: byte
+          readOnly: true
+          description: the hash used to verify the token
+  GuidLink:
+    allOf:
+    - $ref: '#/definitions/GuidObject'
+    - type: object
+      required:
+      - destinationUri
+      properties:
+        destinationUri:
+          type: string
+          format: uri
+        shortUri:
+          type: string
+          readOnly: true
+        metrics:
+          $ref: '#/definitions/LinkMetrics'
+  LinkMetrics:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      description: hits within the past `n` hours
+      properties:
+        hour1:
+          type: integer
+          readOnly: true
+        hour3:
+          type: integer
+          readOnly: true
+        hour6:
+          type: integer
+          readOnly: true
+        hour12:
+          type: integer
+          readOnly: true
+        hour24:
+          type: integer
+          readOnly: true
+        hour48:
+          type: integer
+          readOnly: true
+        hour72:
+          type: integer
+          readOnly: true
+        hour168:
+          type: integer
+          readOnly: true
+        hour336:
+          type: integer
+          readOnly: true
+        hour720:
+          type: integer
+          readOnly: true
+        accessLogs:
+          type: array
+          items:
+            $ref: '#/definitions/AccessLog'
+  FormData:
+    type: object
+    additionalProperties:
+      type: array
+      items:
+        type: string
+    properties:
+      '@files':
+        type: array
+        items:
+          $ref: '#/definitions/BlobMetadata'
+  AccessLog:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        protocol:
+          type: string
+        scheme:
+          type: string
+        method:
+          type: string
+        path:
+          type: string
+        host:
+          type: string
+        contentType:
+          type: string
+        contentLength:
+          type: integer
+        cookies:
+          $ref: '#/definitions/StringMap'
+        headers:
+          $ref: '#/definitions/StringMap'
+        query:
+          $ref: '#/definitions/FormData'
+        form:
+          $ref: '#/definitions/FormData'
+  StringMap:
+    type: object
+    additionalProperties:
+      type: string
+  ActorProfile:
+    type: object
+    additionalProperties:
+      $ref: '#/definitions/StringMap'
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+  ActorStatus:
+    type: string
+    description: >
+      ActorStatus:
+      * `AwaitingRegistration` - new actor status, used when creating new actors
+      * `Active` - Active actor
+      * `Inactive` - Previously active, but has not been used in `x` timespan
+      * `Rejected` - Higher authority did not approve this actor
+      * `AwaitingVerification` - Identity has yet been verified
+      * `AwaitingApproval` - Actor has yet been approved by higher authority
+      * `LockedOut` - Previously active, too many failed authentication attempts
+      * `Disabled` - Previously active, disabled by a higher authority
+    enum:
+    - AwaitingRegistration
+    - Active
+    - Inactive
+    - Rejected
+    - AwaitingVerification
+    - AwaitingApproval
+    - LockedOut
+    - Disabled
+  GuidActor:
+    allOf:
+    - $ref: '#/definitions/GuidObject'
+    - type: object
+      required:
+      - status
+      properties:
+        profile:
+          $ref: '#/definitions/ActorProfile'
+        status:
+          $ref: '#/definitions/ActorStatus'
+  GuidService:
+    allOf:
+    - $ref: '#/definitions/GuidActor'
+    - type: object
+      properties:
+        accessTokens:
+          type: array
+          items:
+            $ref: '#/definitions/AccessToken'
+  AccessToken:
+    allOf:
+    - $ref: '#/definitions/DirectInwardEntity'
+    - type: object
+      properties:
+        service:
+          type: string
+          format: uuid
+        notBefore:
+          type: string
+          format: date-time
+        notAfter:
+          type: string
+          format: date-time
+        secret:
+          type: string
+          format: byte
+  GuidGroup:
+    allOf:
+    - $ref: '#/definitions/GuidActor'
+    - $ref: '#/definitions/ObjectIndex'
+  GuidUser:
+    allOf:
+    - $ref: '#/definitions/GuidActor'
+    - type: object
+      properties:
+        emailAddress:
+          type: string
+          format: email
+        secrets:
+          $ref: '#/definitions/StringMap'
+  Message:
+    type: object
+    properties:
+      message:
+        type: string
+  Error:
+    allOf:
+    - $ref: '#/definitions/Message'
+    - type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        field:
+          type: string
+  ValidationError:
+    allOf:
+    - $ref: '#/definitions/Error'
+    - type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/definitions/Error'
+  RetryError:
+    allOf:
+    - $ref: '#/definitions/Error'
+    - type: object
+      properties:
+        retryAfter:
+          type: string
+          format: date-time
+  CensoredError:
+    allOf:
+    - $ref: '#/definitions/Error'
+    - type: object
+      properties:
+        blockedBy:
+          type: string
+          format: uri
+  Exception:
+    allOf:
+    - $ref: '#/definitions/ValidationError'
+    - type: object
+      properties:
+        stackTrace:
+          type: string
+        innerExceptions:
+          type: array
+          items:
+            $ref: '#/definitions/Exception'
+parameters:
+  ResourceKey:
+    in: path
+    name: guid
+    required: true
+    type: string
+    format: uuid
+    description: The resource key
+  IfMatch:
+    in: header
+    name: If-Match
+    description: Get or Update the resource if the etags match
+    type: string
+  IfModifiedSince:
+    in: header
+    name: If-Modified-Since
+    description: Get the resource if it has been modified since this date
+    type: string
+    format: date-time
+  IfNoneMatch:
+    in: header
+    name: If-None-Match
+    description: Get or update the resource if the etags don't match
+    type: string
+  IfUnmodifiedSince:
+    in: header
+    name: If-Unmodified-Since
+    description: Get or update the resource if it has not been modified since this date
+    type: string
+    format: date-time
+  Page:
+    in: query
+    name: page
+    description: The current page of the index
+    type: integer
+    format: int32
+    default: 1
+    minimum: 1
+  Limit:
+    in: query
+    name: limit
+    description: Limits number of returned items in an index
+    type: integer
+    format: int32
+    default: 10
+    minimum: 10
+    maximum: 1000
+    multipleOf: 10
+  Sort:
+    in: query
+    name: sort
+    description: Sorting order of the items
+    uniqueItems: true
+    collectionFormat: pipes
+    type: array
+    items:
+      type: string
+responses:
+  SuccessMessage:
+    description: Success
+    schema:
+      $ref: '#/definitions/Message'
+  400BadRequest:
+    description: The request was invalid or cannot be otherwise served
+    schema:
+      $ref: '#/definitions/ValidationError'
+  401Unauthorized:
+    description: Authentication credentials were missing or incorrect
+    schema:
+      $ref: '#/definitions/Error'
+  402PaymentRequired:
+    description: The authenticated actor must submit payment to access this entity.
+    schema:
+      $ref: '#/definitions/Error'
+  403Forbidden:
+    description: The request is understood, but it has been refused or access is not allowed.
+    schema:
+      $ref: '#/definitions/Error'
+  404NotFound:
+    description: The URI requested is invalid or the resource requested does not exist
+    schema:
+      $ref: '#/definitions/Error'
+  409Conflict:
+    description: The entity cannot be saved, the requested key is already in use.
+    schema:
+      $ref: '#/definitions/ValidationError'
+  410Gone:
+    description: The resource has been deleted permanently, stop asking
+    schema:
+      $ref: '#/definitions/Error'
+  411LengthRequired:
+    description: Content-Length is required for blob uploads
+    schema:
+      $ref: '#/definitions/Error'
+  412PreconditionFailed:
+    description: Failed to save the entity, the concurrency check failed
+    schema:
+      $ref: '#/definitions/ValidationError'
+  413TooLarge:
+    description: The size of the payload is too large
+    schema:
+      $ref: '#/definitions/Error'
+  417PreconditionFailed:
+    description: The resource was found, but the precondition failed.
+    schema:
+      $ref: '#/definitions/ValidationError'
+  428PreconditionRequired:
+    description: A concurrency check is required to modify this resource
+    schema:
+      $ref: '#/definitions/Error'
+  429TooManyRequests:
+    description: The authenticated actor has been ratelimited
+    schema:
+      $ref: '#/definitions/RetryError'
+  451Censored:
+    description: Unavailable for legal reasons
+    schema:
+      $ref: '#/definitions/CensoredError'
+  500InternalServerError:
+    description: An unexpected application error.
+    schema:
+      $ref: '#/definitions/Exception'
+  503ServiceUnavailable:
+    description: The server is up, but is unable to respond.
+    schema:
+      $ref: '#/definitions/RetryError'
+securityDefinitions: {}
+security: []
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /leblanc-codes/guid.cc/0.1.0
+schemes:
+ - https
