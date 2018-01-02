@@ -1,0 +1,2374 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/leblanc-codes/guid.cc/0.1.0",
+    "variables" : {
+      "version" : {
+        "default" : "0.1.0-oas3"
+      }
+    }
+  }, {
+    "url" : "https://guid.cc"
+  } ],
+  "info" : {
+    "version" : "0.1.0-oas3",
+    "title" : "guid.cc API Specification",
+    "description" : "Stores values on UUID keys. Version 1 and 2 UUIDs are rejected unless the first octet of the node id is set to 1, e.g. `XXXXXXXX-XXXX-VXXX-XXXX-1XXXXXXXXXXX`. Creates version 5 UUIDs for actor identifiers. Creates version 3 UUIDs for non-actor objects.",
+    "contact" : {
+      "name" : "LeBlanc Codes, LLC",
+      "url" : "https://github.com/demosdemon/guid.cc/issues",
+      "email" : "contact@leblanc.codes"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "security" : [ {
+    "auth0" : [ "app:guid" ]
+  } ],
+  "paths" : {
+    "/guid" : {
+      "summary" : "Generate a new guid",
+      "get" : {
+        "tags" : [ "GuidGenerator" ],
+        "operationId" : "NewVersion4Guid",
+        "security" : [ ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/GuidResponse"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "GuidGenerator" ],
+        "operationId" : "NewGuid",
+        "security" : [ ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NewGuidRequest"
+              },
+              "examples" : {
+                "version3" : {
+                  "value" : {
+                    "namespace" : "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
+                    "name" : "https://guid.cc/"
+                  }
+                },
+                "version4" : {
+                  "value" : {
+                    "version" : 4
+                  }
+                },
+                "version5" : {
+                  "value" : {
+                    "version" : 5,
+                    "name" : "Admin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/GuidResponse"
+          }
+        }
+      }
+    },
+    "/root" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/IfMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfNoneMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfUnmodifiedSince"
+      } ],
+      "get" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "IndexRootContainer",
+        "summary" : "Browse the root container",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/IfModifiedSince"
+        }, {
+          "$ref" : "#/components/parameters/Page"
+        }, {
+          "$ref" : "#/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/parameters/Sort"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidContainer"
+                },
+                "examples" : {
+                  "response" : {
+                    "value" : {
+                      "uri" : "https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                      "guid" : "e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                      "parents" : {
+                        "_metadata" : {
+                          "page" : 1,
+                          "perPage" : 10,
+                          "pageCount" : 1,
+                          "totalCount" : 1,
+                          "links" : {
+                            "self" : "https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539/parents?page=1&limit=10"
+                          }
+                        },
+                        "items" : [ {
+                          "uri" : "https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                          "type" : "GuidContainer",
+                          "lastModified" : "2018-01-01T23:23:23.999Z",
+                          "key" : "e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                          "etag" : "R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P",
+                          "metadata" : { }
+                        } ]
+                      },
+                      "etag" : "R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P",
+                      "created" : "2017-12-01T00:00:00.000Z",
+                      "lastModified" : "2018-01-01T23:23:23.999Z",
+                      "type" : "GuidContainer",
+                      "metadata" : { },
+                      "_metadata" : {
+                        "page" : 1,
+                        "perPage" : 10,
+                        "pageCount" : 1,
+                        "totalCount" : 2,
+                        "links" : {
+                          "self" : "https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539?page=1&limit=10"
+                        }
+                      },
+                      "items" : [ {
+                        "uri" : "https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173",
+                        "type" : "GuidGroup",
+                        "lastModified" : "2018-01-01T23:23:23.999Z",
+                        "metadata" : {
+                          "displayName" : "Admin"
+                        },
+                        "key" : "30ebb8c5-23ba-4848-a908-91b3afb74173",
+                        "etag" : "itMj4525s1fqrSFkK4QnKLnYEtVvKED1Nz0l"
+                      }, {
+                        "uri" : "https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4",
+                        "type" : "GuidUser",
+                        "lastModified" : "2018-01-01T23:23:23.999Z",
+                        "metadata" : {
+                          "displayName" : "Admin"
+                        },
+                        "key" : "3bf5dc99-7152-4d85-8139-39d1a11abbc4",
+                        "etag" : "8lMq9IAkg7IocvCjLo7QPUqtW3F9I4FLKgLm"
+                      } ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/root/create/container" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanContainer",
+        "summary" : "Create an orphaned container",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidContainer"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidContainer"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidContainer"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/root/create/document" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanDocument",
+        "summary" : "Create an orphaned document",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidDocument"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidDocument"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidDocument"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/root/create/blob" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanBlob",
+        "summary" : "Create an orphaned blob",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidBlob"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/octet-stream" : {
+              "schema" : {
+                "type" : "string",
+                "format" : "binary"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/root/create/link" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanLink",
+        "summary" : "Create an orphaned link",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidLink"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidLink"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidLink"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/root/create/service" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanService",
+        "summary" : "Create an orphaned service actor",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidService"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidService"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidService"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/root/create/group" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanGroup",
+        "summary" : "Created an orphaned group",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidGroup"
+                },
+                "examples" : {
+                  "response" : {
+                    "value" : {
+                      "uri" : "https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173",
+                      "guid" : "30ebb8c5-23ba-4848-a908-91b3afb74173",
+                      "parents" : {
+                        "_metadata" : {
+                          "page" : 1,
+                          "perPage" : 10,
+                          "pageCount" : 1,
+                          "totalCount" : 1,
+                          "links" : {
+                            "self" : "https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173/parents?page=1&limit=10"
+                          }
+                        },
+                        "items" : [ {
+                          "uri" : "https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                          "type" : "GuidContainer",
+                          "lastModified" : "2018-01-01T23:23:23.999Z",
+                          "key" : "e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                          "etag" : "R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P",
+                          "metadata" : { }
+                        } ]
+                      },
+                      "etag" : "itMj4525s1fqrSFkK4QnKLnYEtVvKED1Nz0l",
+                      "created" : "2017-12-01T00:00:00.000Z",
+                      "lastModified" : "2018-01-01T23:23:23.999Z",
+                      "type" : "GuidGroup",
+                      "profile" : {
+                        "name" : "Admins",
+                        "description" : "The admins",
+                        "publicAttribute" : true
+                      },
+                      "metadata" : {
+                        "displayName" : "Admin"
+                      },
+                      "status" : "Active",
+                      "_metadata" : {
+                        "page" : 1,
+                        "perPage" : 10,
+                        "pageCount" : 1,
+                        "totalCount" : 1,
+                        "links" : {
+                          "self" : "https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173?page=1&limit=10"
+                        }
+                      },
+                      "items" : [ {
+                        "uri" : "https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4",
+                        "type" : "GuidUser",
+                        "lastModified" : "2018-01-01T23:23:23.999Z",
+                        "metadata" : {
+                          "displayName" : "Admin"
+                        },
+                        "key" : "3bf5dc99-7152-4d85-8139-39d1a11abbc4",
+                        "etag" : "8lMq9IAkg7IocvCjLo7QPUqtW3F9I4FLKgLm",
+                        "status" : "Active"
+                      } ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidGroup"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidGroup"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/root/create/user" : {
+      "post" : {
+        "tags" : [ "RootContainer" ],
+        "operationId" : "CreateOrphanUser",
+        "summary" : "Create an orphaned user",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidUser"
+                },
+                "examples" : {
+                  "response" : {
+                    "value" : {
+                      "uri" : "https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4",
+                      "guid" : "3bf5dc99-7152-4d85-8139-39d1a11abbc4",
+                      "parents" : {
+                        "_metadata" : {
+                          "page" : 1,
+                          "perPage" : 10,
+                          "pageCount" : 1,
+                          "totalCount" : 2,
+                          "links" : {
+                            "self" : "https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4/parents?page=1&limit=10"
+                          }
+                        },
+                        "items" : [ {
+                          "uri" : "https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                          "type" : "GuidContainer",
+                          "lastModified" : "2018-01-01T23:23:23.999Z",
+                          "key" : "e7c50bcc-0866-4fc2-a7f0-b49278a6b539",
+                          "etag" : "R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P",
+                          "metadata" : { }
+                        }, {
+                          "uri" : "https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173",
+                          "type" : "GuidGroup",
+                          "lastModified" : "2018-01-01T23:23:23.999Z",
+                          "metadata" : {
+                            "displayName" : "Admin"
+                          },
+                          "key" : "30ebb8c5-23ba-4848-a908-91b3afb74173",
+                          "etag" : "itMj4525s1fqrSFkK4QnKLnYEtVvKED1Nz0l"
+                        } ]
+                      },
+                      "etag" : "8lMq9IAkg7IocvCjLo7QPUqtW3F9I4FLKgLm",
+                      "created" : "2017-12-01T00:00:00.000Z",
+                      "lastModified" : "2018-01-01T23.23.23.999Z",
+                      "type" : "GuidUser",
+                      "metadata" : {
+                        "displayName" : "Admin"
+                      },
+                      "profile" : {
+                        "name" : "Admin",
+                        "description" : "The admin"
+                      },
+                      "status" : "Active",
+                      "emailAddress" : "contact@leblanc.codes",
+                      "secrets" : {
+                        "foo" : "really secret bar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidUser"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/GuidUser"
+              }
+            }
+          },
+          "required" : true
+        }
+      }
+    },
+    "/{guid}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "$ref" : "#/components/parameters/IfMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfNoneMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfUnmodifiedSince"
+      } ],
+      "get" : {
+        "tags" : [ "KeyValueStore" ],
+        "summary" : "Get object by key",
+        "operationId" : "GetObjectByKey",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/IfModifiedSince"
+        }, {
+          "$ref" : "#/components/parameters/Page"
+        }, {
+          "$ref" : "#/components/parameters/Limit"
+        }, {
+          "$ref" : "#/components/parameters/Sort"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/404NotFound"
+          },
+          "410" : {
+            "$ref" : "#/components/responses/410Gone"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "451" : {
+            "$ref" : "#/components/responses/451Censored"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "KeyValueStore" ],
+        "summary" : "New object with explicit key",
+        "operationId" : "AddObjectByKey",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/409Conflict"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GuidObject"
+        }
+      },
+      "put" : {
+        "tags" : [ "KeyValueStore" ],
+        "summary" : "Update existing object by key",
+        "operationId" : "UpdateObjectByKey",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/409Conflict"
+          },
+          "417" : {
+            "$ref" : "#/components/responses/417PreconditionFailed"
+          },
+          "428" : {
+            "$ref" : "#/components/responses/428PreconditionRequired"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/GuidObject"
+        }
+      },
+      "delete" : {
+        "tags" : [ "KeyValueStore" ],
+        "summary" : "Delete object with key",
+        "operationId" : "DeleteObjectByKey",
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/SuccessMessage"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/409Conflict"
+          },
+          "417" : {
+            "$ref" : "#/components/responses/417PreconditionFailed"
+          },
+          "428" : {
+            "$ref" : "#/components/responses/428PreconditionRequired"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        }
+      }
+    },
+    "/{guid}/rekey" : {
+      "post" : {
+        "tags" : [ "KeyValueStore" ],
+        "operationId" : "ChangeObjectKey",
+        "summary" : "Change an object's key in-place",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/ResourceKey"
+        }, {
+          "in" : "query",
+          "name" : "newKey",
+          "required" : false,
+          "description" : "The new key to use, one will be generated otherwise",
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{guid}/seize" : {
+      "post" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "TakeOwnershipOfObject",
+        "summary" : "Take ownership of object at key",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/ResourceKey"
+        } ],
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/SuccessMessage"
+          }
+        }
+      }
+    },
+    "/{guid}/acl" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "$ref" : "#/components/parameters/IfMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfNoneMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfUnmodifiedSince"
+      } ],
+      "get" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "GetObjectAccessControlList",
+        "summary" : "Get access control list for a key",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/IfModifiedSince"
+        }, {
+          "in" : "query",
+          "name" : "inherit",
+          "description" : "include inherited permissions",
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccessControlList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/404NotFound"
+          },
+          "410" : {
+            "$ref" : "#/components/responses/410Gone"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "UpdateObjectAccessControlList",
+        "summary" : "Replace an object's access control list",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccessControlList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/409Conflict"
+          },
+          "417" : {
+            "$ref" : "#/components/responses/417PreconditionFailed"
+          },
+          "428" : {
+            "$ref" : "#/components/responses/428PreconditionRequired"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AccessControlList"
+              }
+            },
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AccessControlList"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "post" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "InsertObjectAccessControlItem",
+        "summary" : "Insert a new access control item record",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccessControlListItem"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400BadRequest"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/401Unauthorized"
+          },
+          "402" : {
+            "$ref" : "#/components/responses/402PaymentRequired"
+          },
+          "403" : {
+            "$ref" : "#/components/responses/403Forbidden"
+          },
+          "409" : {
+            "$ref" : "#/components/responses/409Conflict"
+          },
+          "429" : {
+            "$ref" : "#/components/responses/429TooManyRequests"
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500InternalServerError"
+          },
+          "503" : {
+            "$ref" : "#/components/responses/503ServiceUnavailable"
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AccessControlListItem"
+        }
+      }
+    },
+    "/{guid}/acl/{itemid}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "$ref" : "#/components/parameters/IfMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfNoneMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfUnmodifiedSince"
+      }, {
+        "in" : "path",
+        "name" : "itemid",
+        "required" : true,
+        "schema" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      } ],
+      "get" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "GetIndividualAclItem",
+        "summary" : "Select an individual acl record",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/IfModifiedSince"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccessControlListItem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "UpdateIndividualAclItem",
+        "summary" : "Update an individual acl record",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccessControlListItem"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/AccessControlListItem"
+        }
+      },
+      "delete" : {
+        "tags" : [ "Permissions" ],
+        "operationId" : "DeleteIndividualAclItem",
+        "summary" : "Delete an individual acl record",
+        "responses" : {
+          "200" : {
+            "$ref" : "#/components/responses/SuccessMessage"
+          }
+        }
+      }
+    },
+    "/{guid}/history" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "$ref" : "#/components/parameters/IfMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfNoneMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfUnmodifiedSince"
+      } ],
+      "get" : {
+        "tags" : [ "Audit" ],
+        "operationId" : "GetObjectOperationLog",
+        "summary" : "Return an index of operation log items",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/IfModifiedSince"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "allOf" : [ {
+                    "$ref" : "#/components/schemas/Index"
+                  }, {
+                    "type" : "object",
+                    "properties" : {
+                      "items" : {
+                        "type" : "array",
+                        "items" : {
+                          "$ref" : "#/components/schemas/IndexItem"
+                        }
+                      }
+                    }
+                  } ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{guid}/history/{itemid}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "$ref" : "#/components/parameters/IfMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfNoneMatch"
+      }, {
+        "$ref" : "#/components/parameters/IfUnmodifiedSince"
+      }, {
+        "in" : "path",
+        "name" : "itemid",
+        "required" : true,
+        "schema" : {
+          "type" : "integer",
+          "format" : "int64"
+        }
+      } ],
+      "get" : {
+        "tags" : [ "Audit" ],
+        "operationId" : "GetObjectOperationLogItem",
+        "summary" : "Get a log item from the operation log",
+        "parameters" : [ {
+          "$ref" : "#/components/parameters/IfModifiedSince"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationLog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{guid}/link/{child}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "$ref" : "#/components/parameters/ChildKey"
+      } ],
+      "get" : {
+        "tags" : [ "Collection" ],
+        "operationId" : "GetChild",
+        "summary" : "Select a child element",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/KeyIndexItem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Collection" ],
+        "operationId" : "AddChild",
+        "summary" : "Add child to collection",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidContainer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Collection" ],
+        "operationId" : "RemoveChild",
+        "summary" : "Remove child from collection",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GuidContainer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{guid}/create/container" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/create/document" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/create/blob" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/create/link" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/create/service" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/create/group" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/create/user" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/query" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/properties" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      } ]
+    },
+    "/{guid}/properties/{name}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/ResourceKey"
+      }, {
+        "in" : "path",
+        "name" : "name",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ]
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "MetaGuidObject" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/GuidContainer"
+        }, {
+          "$ref" : "#/components/schemas/GuidDocument"
+        }, {
+          "$ref" : "#/components/schemas/GuidBlob"
+        }, {
+          "$ref" : "#/components/schemas/MetaGuidActor"
+        } ],
+        "discriminator" : {
+          "propertyName" : "type"
+        }
+      },
+      "MetaGuidActor" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/GuidService"
+        }, {
+          "$ref" : "#/components/schemas/GuidGroup"
+        }, {
+          "$ref" : "#/components/schemas/GuidUser"
+        } ],
+        "discriminator" : {
+          "propertyName" : "type"
+        }
+      },
+      "Guid" : {
+        "type" : "string",
+        "format" : "uuid",
+        "description" : "The nom de plume"
+      },
+      "NewNamedGuidRequest" : {
+        "type" : "object",
+        "required" : [ "version", "name" ],
+        "properties" : {
+          "version" : {
+            "type" : "integer",
+            "enum" : [ 3, 5 ]
+          },
+          "namespace" : {
+            "type" : "string",
+            "default" : "https://guid.cc/"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "NewRandomGuidRequest" : {
+        "type" : "object",
+        "required" : [ "version" ],
+        "properties" : {
+          "version" : {
+            "type" : "integer",
+            "enum" : [ 4 ]
+          }
+        }
+      },
+      "NewGuidRequest" : {
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/NewNamedGuidRequest"
+        }, {
+          "$ref" : "#/components/schemas/NewRandomGuidRequest"
+        } ],
+        "discriminator" : {
+          "propertyName" : "version",
+          "mapping" : {
+            "3" : "#/components/schemas/NewNamedGuidRequest",
+            "4" : "#/components/schemas/NewRandomGuidRequest",
+            "5" : "#/components/schemas/NewNamedGuidRequest"
+          }
+        }
+      },
+      "DirectInwardEntity" : {
+        "type" : "object",
+        "properties" : {
+          "uri" : {
+            "type" : "string",
+            "format" : "uri",
+            "readOnly" : true,
+            "description" : "The URI directly to this entity"
+          }
+        }
+      },
+      "Operation" : {
+        "type" : "string",
+        "description" : "Operation:\n  * `Meta/*` - aren't settable, generated via heuristics\n  * `Meta/Anonymous` - used by actions that expect anonymous users, (i.e., create user)\n  * `Meta/Superuser` - root level user, applied to all objects\n  * `Meta/Owner` - applied to all objects, except the root container\n  * `Meta/Self` - applied to all group, user, and service objects\n  * `GuidObject/*` - glob applies all permissions including subtypes\n  * `GuidObject/BrowseObject` - show in container index, implies ReadMetadata\n  * `GuidObject/ReadObject` - read the object value(s), not otherwise restricted\n  * `GuidContainer/RetainOwnership` - the entity with the `RetainOwnership`\n  permission is assigned ownership. e.g., group `foo` has `RetainOwnership`\n  defined on container `c`, user `bar` is a member of group `foo` but only\n  inherits `RetainOwnership` through group `foo`, user `bar` adds *an item*\n  to the container `c`, ownership is assigned to group `foo`, user `bar`\n  maintains ownership as long as it remains a member of group `foo`. However,\n  if user `bar` does have `RetainOwnership` independently defined on container\n  `c`, then ownership is assigned to user `bar` itself.\n  * `GuidContainer/CreateOrphan` - otherwise error when unlinking from the last parent\n  * `GuidDocument/QueryDocument` - execute jmespath query on document\n  * `GuidDocument/IndexDocument` - create a relational index, implies QueryDocument\n",
+        "enum" : [ "Meta/Anonymous", "Meta/Superuser", "Meta/Owner", "Meta/Self", "GuidObject/*", "GuidObject/TakeOwnership", "GuidObject/UpdateKey", "GuidObject/BrowseObject", "GuidObject/ReadMetadata", "GuidObject/UpdateMetadata", "GuidObject/ReadAccessControlList", "GuidObject/UpdateAccessControlList", "GuidObject/DisableAccessControlInheritance", "GuidObject/ReadObject", "GuidObject/DeleteObject", "GuidObject/ViewHistory", "GuidContainer/*", "GuidContainer/RetainOwnership", "GuidContainer/LinkChild", "GuidContainer/UnlinkChild", "GuidContainer/CreateOrphan", "GuidContainer/CreateChild/*", "GuidContainer/CreateChild/GuidContainer", "GuidContainer/CreateChild/GuidDocument", "GuidContainer/CreateChild/GuidBlob", "GuidContainer/CreateChild/GuidLink", "GuidContainer/CreateChild/GuidService", "GuidContainer/CreateChild/GuidGroup", "GuidContainer/CreateChild/GuidUser", "GuidDocument/*", "GuidDocument/ReadSchema", "GuidDocument/UpdateSchema", "GuidDocument/OverrideSchema", "GuidDocument/QueryDocument", "GuidDocument/IndexDocument", "GuidDocument/AddProperty", "GuidDocument/UpdateProperty", "GuidDocument/DeleteProperty", "GuidBlob/*", "GuidBlob/AppendBlob", "GuidBlob/ReplaceBlob", "GuidBlob/UpdateProperties", "GuidBlob/DownloadToken/*", "GuidBlob/DownloadToken/List", "GuidBlob/DownloadToken/Issue", "GuidBlob/DownloadToken/IssueIndefinite", "GuidBlob/DownloadToken/Revoke", "GuidLink/*", "GuidLink/UpdateDestination", "GuidLink/ReadMetrics", "GuidLink/ReadAccessLog", "GuidActor/*", "GuidActor/ReadProfile", "GuidActor/UpdateProfile", "GuidActor/ReadStatus", "GuidActor/UpdateStatus", "GuidActor/SendMessage", "GuidService/*", "GuidService/ReadSecret", "GuidService/CreateSecret", "GuidService/DeleteSecret", "GuidGroup/*", "GuidGroup/AddMember", "GuidGroup/RemoveMember", "GuidUser/*", "GuidUser/ReadEmail", "GuidUser/UpdateEmail", "GuidUser/UpdatePassword", "GuidUser/DecryptSecrets", "GuidUser/UpdateSecrets" ]
+      },
+      "GuidObjectType" : {
+        "type" : "string",
+        "description" : "The core object type",
+        "enum" : [ "GuidContainer", "GuidDocument", "GuidBlob", "GuidLink", "GuidService", "GuidGroup", "GuidUser" ]
+      },
+      "Index" : {
+        "type" : "object",
+        "required" : [ "items" ],
+        "properties" : {
+          "_metadata" : {
+            "$ref" : "#/components/schemas/IndexMetadata"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object"
+            }
+          }
+        }
+      },
+      "LinkReference" : {
+        "type" : "object",
+        "description" : "Links this resource to another resource, just like a Link header or link html element.",
+        "required" : [ "rel", "href" ],
+        "properties" : {
+          "rel" : {
+            "type" : "string"
+          },
+          "href" : {
+            "type" : "string",
+            "format" : "uri"
+          },
+          "type" : {
+            "type" : "string"
+          }
+        }
+      },
+      "IndexMetadata" : {
+        "type" : "object",
+        "readOnly" : true,
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "the type of element in the container"
+          },
+          "page" : {
+            "type" : "integer",
+            "description" : "the current page of the container view"
+          },
+          "limit" : {
+            "type" : "integer",
+            "description" : "the results per page"
+          },
+          "pageCount" : {
+            "type" : "integer",
+            "description" : "number of pages"
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "number of elements"
+          },
+          "links" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/LinkReference"
+            },
+            "minItems" : 1
+          }
+        }
+      },
+      "IndexItem" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "type" : {
+              "description" : "This is not a `GuidObjectType` because not all `DirectInwardEntity`s are `GuidObject` rooted elements. See `KeyIndexItem`.",
+              "type" : "string"
+            },
+            "lastModified" : {
+              "type" : "string",
+              "format" : "date-time",
+              "readOnly" : true
+            },
+            "metadata" : {
+              "readOnly" : true,
+              "allOf" : [ {
+                "$ref" : "#/components/schemas/StringMap"
+              } ]
+            }
+          }
+        } ]
+      },
+      "KeyIndexItem" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/IndexItem"
+        }, {
+          "type" : "object",
+          "required" : [ "key" ],
+          "properties" : {
+            "key" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "etag" : {
+              "description" : "Use for concurrency checks, null to skip",
+              "type" : "string"
+            },
+            "type" : {
+              "$ref" : "#/components/schemas/GuidObjectType"
+            }
+          }
+        } ]
+      },
+      "ActorIndexItem" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/KeyIndexItem"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "status" : {
+              "$ref" : "#/components/schemas/ActorStatus"
+            }
+          }
+        } ]
+      },
+      "GenericObject" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/components/schemas/GenericObject"
+        }
+      },
+      "AccessControlList" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "$ref" : "#/components/schemas/Index"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "resource" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "owner" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "inherit" : {
+              "type" : "boolean",
+              "default" : true,
+              "description" : "whether or not this resource inherits the ACLs from its parents"
+            },
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AccessControlListItem"
+              }
+            }
+          }
+        } ]
+      },
+      "AccessControlListItem" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "actor" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "deny" : {
+              "type" : "boolean",
+              "default" : false,
+              "description" : "override a parent acl and deny this actor this permission"
+            },
+            "operation" : {
+              "$ref" : "#/components/schemas/Operation"
+            }
+          }
+        } ]
+      },
+      "OperationLog" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "operation" : {
+              "$ref" : "#/components/schemas/Operation"
+            },
+            "datetime" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "actor" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "resource" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "responseCode" : {
+              "type" : "integer"
+            }
+          }
+        } ]
+      },
+      "GuidObject" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "required" : [ "type" ],
+          "discriminator" : {
+            "propertyName" : "type"
+          },
+          "properties" : {
+            "guid" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "parents" : {
+              "readOnly" : true,
+              "allOf" : [ {
+                "$ref" : "#/components/schemas/Index"
+              }, {
+                "type" : "object",
+                "properties" : {
+                  "items" : {
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/ActorIndexItem"
+                    }
+                  }
+                }
+              } ]
+            },
+            "etag" : {
+              "type" : "string"
+            },
+            "created" : {
+              "type" : "string",
+              "format" : "date-time",
+              "readOnly" : true
+            },
+            "lastModified" : {
+              "type" : "string",
+              "format" : "date-time",
+              "readOnly" : true
+            },
+            "type" : {
+              "$ref" : "#/components/schemas/GuidObjectType"
+            },
+            "metadata" : {
+              "$ref" : "#/components/schemas/StringMap"
+            }
+          }
+        } ]
+      },
+      "GuidContainer" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidObject"
+        }, {
+          "$ref" : "#/components/schemas/Index"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/KeyIndexItem"
+              }
+            }
+          }
+        } ]
+      },
+      "GuidDocument" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidObject"
+        }, {
+          "type" : "object",
+          "required" : [ "document" ],
+          "properties" : {
+            "document" : {
+              "$ref" : "#/components/schemas/GenericObject"
+            },
+            "schema" : {
+              "$ref" : "#/components/schemas/GenericObject"
+            },
+            "validateSchema" : {
+              "type" : "boolean",
+              "default" : true
+            }
+          }
+        } ]
+      },
+      "DataHashes" : {
+        "type" : "object",
+        "properties" : {
+          "md5" : {
+            "type" : "string",
+            "format" : "byte"
+          },
+          "sha1" : {
+            "type" : "string",
+            "format" : "byte"
+          },
+          "sha256" : {
+            "type" : "string",
+            "format" : "byte"
+          },
+          "sha512" : {
+            "type" : "string",
+            "format" : "byte"
+          }
+        }
+      },
+      "BlobMetadata" : {
+        "type" : "object",
+        "required" : [ "contentType", "contentLength" ],
+        "properties" : {
+          "filename" : {
+            "type" : "string"
+          },
+          "contentType" : {
+            "type" : "string"
+          },
+          "contentLength" : {
+            "type" : "integer"
+          },
+          "encoding" : {
+            "type" : "string"
+          },
+          "dataHashes" : {
+            "$ref" : "#/components/schemas/DataHashes"
+          }
+        }
+      },
+      "GuidBlob" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidObject"
+        }, {
+          "$ref" : "#/components/schemas/BlobMetadata"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "downloadTokens" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/DownloadToken"
+              }
+            }
+          }
+        } ]
+      },
+      "DownloadToken" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "downloadUri" : {
+              "type" : "string",
+              "format" : "uri",
+              "readOnly" : true,
+              "description" : "The computed URI to the blob download"
+            },
+            "blob" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "notBefore" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "notAfter" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "ipNetworks" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string"
+              },
+              "description" : "array of ip networks in CIDR notation (127.0.0.1/32)"
+            },
+            "hash" : {
+              "type" : "string",
+              "format" : "byte",
+              "readOnly" : true,
+              "description" : "the hash used to verify the token"
+            }
+          }
+        } ]
+      },
+      "GuidLink" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidObject"
+        }, {
+          "type" : "object",
+          "required" : [ "destinationUri" ],
+          "properties" : {
+            "destinationUri" : {
+              "type" : "string",
+              "format" : "uri"
+            },
+            "shortUri" : {
+              "type" : "string",
+              "readOnly" : true
+            },
+            "metrics" : {
+              "$ref" : "#/components/schemas/LinkMetrics"
+            }
+          }
+        } ]
+      },
+      "LinkMetrics" : {
+        "readOnly" : true,
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "description" : "hits within the past `n` hours",
+          "properties" : {
+            "hour1" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour3" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour6" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour12" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour24" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour48" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour72" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour168" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour336" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "hour720" : {
+              "type" : "integer",
+              "readOnly" : true
+            },
+            "accessLogs" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/AccessLog"
+              }
+            }
+          }
+        } ]
+      },
+      "FormData" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "@files" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BlobMetadata"
+            }
+          }
+        }
+      },
+      "AccessLog" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "protocol" : {
+              "type" : "string"
+            },
+            "scheme" : {
+              "type" : "string"
+            },
+            "method" : {
+              "type" : "string"
+            },
+            "path" : {
+              "type" : "string"
+            },
+            "host" : {
+              "type" : "string"
+            },
+            "contentType" : {
+              "type" : "string"
+            },
+            "contentLength" : {
+              "type" : "integer"
+            },
+            "cookies" : {
+              "$ref" : "#/components/schemas/StringMap"
+            },
+            "headers" : {
+              "$ref" : "#/components/schemas/StringMap"
+            },
+            "query" : {
+              "$ref" : "#/components/schemas/FormData"
+            },
+            "form" : {
+              "$ref" : "#/components/schemas/FormData"
+            }
+          }
+        } ]
+      },
+      "StringMap" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string"
+        }
+      },
+      "ActorProfile" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/components/schemas/StringMap"
+        },
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ActorStatus" : {
+        "type" : "string",
+        "readOnly" : true,
+        "description" : "ActorStatus: \n  * `AwaitingRegistration` - new actor status, used when creating new actors\n  * `Active` - Active actor\n  * `Inactive` - Previously active, but has not been used in `x` timespan\n  * `Rejected` - Higher authority did not approve this actor \n  * `AwaitingVerification` - Identity has not yet been verified \n  * `AwaitingApproval` - Actor has not yet been approved by higher authority\n  * `LockedOut` - Previously active, too many failed authentication attempts\n  * `Disabled` - Previously active, disabled by a higher authority\n",
+        "enum" : [ "AwaitingRegistration", "Active", "Inactive", "Rejected", "AwaitingVerification", "AwaitingApproval", "LockedOut", "Disabled" ]
+      },
+      "GuidActor" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidObject"
+        }, {
+          "type" : "object",
+          "required" : [ "status" ],
+          "properties" : {
+            "profile" : {
+              "$ref" : "#/components/schemas/ActorProfile"
+            },
+            "status" : {
+              "$ref" : "#/components/schemas/ActorStatus"
+            }
+          }
+        } ]
+      },
+      "GuidService" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidActor"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "accessTokens" : {
+              "type" : "array",
+              "readOnly" : true,
+              "items" : {
+                "$ref" : "#/components/schemas/AccessToken"
+              }
+            }
+          }
+        } ]
+      },
+      "AccessToken" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/DirectInwardEntity"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "service" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "notBefore" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "notAfter" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "secret" : {
+              "type" : "string",
+              "format" : "byte"
+            }
+          }
+        } ]
+      },
+      "GuidGroup" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidActor"
+        }, {
+          "$ref" : "#/components/schemas/Index"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "items" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/ActorIndexItem"
+              }
+            }
+          }
+        } ]
+      },
+      "GuidUser" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/GuidActor"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "emailAddress" : {
+              "type" : "string",
+              "format" : "email"
+            },
+            "secrets" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "string",
+                "format" : "password"
+              }
+            }
+          }
+        } ]
+      },
+      "Message" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Error" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Message"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "code" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "field" : {
+              "type" : "string"
+            }
+          }
+        } ]
+      },
+      "ValidationError" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Error"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "errors" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Error"
+              }
+            }
+          }
+        } ]
+      },
+      "RetryError" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Error"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "retryAfter" : {
+              "type" : "string",
+              "format" : "date-time"
+            }
+          }
+        } ]
+      },
+      "CensoredError" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/Error"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "blockedBy" : {
+              "type" : "string",
+              "format" : "uri"
+            }
+          }
+        } ]
+      },
+      "Exception" : {
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/ValidationError"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "stackTrace" : {
+              "type" : "string"
+            },
+            "innerExceptions" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/Exception"
+              }
+            }
+          }
+        } ]
+      }
+    },
+    "responses" : {
+      "GuidResponse" : {
+        "description" : "OK",
+        "content" : {
+          "text/plain" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "examples" : {
+              "response" : {
+                "value" : "d116807d-794d-4995-9ebc-252d31301869"
+              }
+            }
+          },
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Guid"
+            },
+            "examples" : {
+              "response" : {
+                "value" : "\"d116807d-794d-4995-9ebc-252d31301869\""
+              }
+            }
+          }
+        }
+      },
+      "SuccessMessage" : {
+        "description" : "Success",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Message"
+            }
+          }
+        }
+      },
+      "400BadRequest" : {
+        "description" : "The request was invalid or cannot be otherwise served",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "401Unauthorized" : {
+        "description" : "Authentication credentials were missing or incorrect",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "402PaymentRequired" : {
+        "description" : "The authenticated actor must submit payment to access this entity.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "403Forbidden" : {
+        "description" : "The request is understood, but it has been refused or access is not allowed.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "404NotFound" : {
+        "description" : "The URI requested is invalid or the resource requested does not exist",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "409Conflict" : {
+        "description" : "The entity cannot be saved, the requested key is already in use.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "410Gone" : {
+        "description" : "The resource has been deleted permanently, stop asking",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "411LengthRequired" : {
+        "description" : "Content-Length is required for blob uploads",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "412PreconditionFailed" : {
+        "description" : "Failed to save the entity, the concurrency check failed",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "413TooLarge" : {
+        "description" : "The size of the payload is too large",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "417PreconditionFailed" : {
+        "description" : "The resource was found, but the precondition failed.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "428PreconditionRequired" : {
+        "description" : "A concurrency check is required to modify this resource",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "429TooManyRequests" : {
+        "description" : "The authenticated actor has been ratelimited",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RetryError"
+            }
+          }
+        }
+      },
+      "451Censored" : {
+        "description" : "Unavailable for legal reasons",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/CensoredError"
+            }
+          }
+        }
+      },
+      "500InternalServerError" : {
+        "description" : "An unexpected application error.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Exception"
+            }
+          }
+        }
+      },
+      "503ServiceUnavailable" : {
+        "description" : "The server is up, but is unable to respond.",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RetryError"
+            }
+          }
+        }
+      }
+    },
+    "parameters" : {
+      "ResourceKey" : {
+        "in" : "path",
+        "name" : "guid",
+        "required" : true,
+        "description" : "The resource key. Elements are indexed on guid keys. The special key `root` is also accepted as a synonym for the root container key.",
+        "schema" : {
+          "oneOf" : [ {
+            "type" : "string",
+            "enum" : [ "root" ]
+          }, {
+            "type" : "string",
+            "format" : "uuid"
+          } ]
+        }
+      },
+      "ChildKey" : {
+        "in" : "path",
+        "name" : "child",
+        "required" : true,
+        "description" : "The child key",
+        "schema" : {
+          "type" : "string",
+          "format" : "uuid"
+        }
+      },
+      "IfMatch" : {
+        "in" : "header",
+        "name" : "If-Match",
+        "description" : "Get or Update the resource if the etags match",
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "IfModifiedSince" : {
+        "in" : "header",
+        "name" : "If-Modified-Since",
+        "description" : "Get the resource if it has been modified since this date",
+        "schema" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "IfNoneMatch" : {
+        "in" : "header",
+        "name" : "If-None-Match",
+        "description" : "Get or update the resource if the etags don't match",
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "IfUnmodifiedSince" : {
+        "in" : "header",
+        "name" : "If-Unmodified-Since",
+        "description" : "Get or update the resource if it has not been modified since this date",
+        "schema" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      },
+      "Page" : {
+        "in" : "query",
+        "name" : "page",
+        "description" : "The current page of the index",
+        "schema" : {
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 1,
+          "default" : 1
+        }
+      },
+      "Limit" : {
+        "in" : "query",
+        "name" : "limit",
+        "description" : "Limits number of returned items in an index",
+        "schema" : {
+          "type" : "integer",
+          "format" : "int32",
+          "minimum" : 10,
+          "maximum" : 1000,
+          "multipleOf" : 10,
+          "default" : 10
+        }
+      },
+      "Sort" : {
+        "in" : "query",
+        "name" : "sort",
+        "description" : "Sorting order of the items",
+        "style" : "pipeDelimited",
+        "schema" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          },
+          "uniqueItems" : true
+        }
+      }
+    },
+    "requestBodies" : {
+      "GuidObject" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/GuidObject"
+            }
+          },
+          "application/x-www-form-urlencoded" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/GuidObject"
+            }
+          }
+        },
+        "required" : true
+      },
+      "AccessControlListItem" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/AccessControlListItem"
+            }
+          },
+          "application/x-www-form-urlencoded" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/AccessControlListItem"
+            }
+          }
+        },
+        "required" : true
+      }
+    },
+    "securitySchemes" : {
+      "auth0" : {
+        "type" : "oauth2",
+        "flows" : {
+          "authorizationCode" : {
+            "authorizationUrl" : "https://pabuco.auth0.com/authorize",
+            "tokenUrl" : "https://pabuco.auth0.com/oauth/token",
+            "scopes" : {
+              "app:guid" : "access to the guid application"
+            }
+          }
+        }
+      }
+    }
+  }
+}
