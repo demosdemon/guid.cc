@@ -16,9 +16,16 @@ securityDefinitions:
     flow: accessCode
     authorizationUrl: https://pabuco.auth0.com/authorize
     tokenUrl: https://pabuco.auth0.com/oauth/token
-    scopes: {}
+    scopes:
+      app:guid: access to the guid application
+consumes:
+- application/json
+- application/x-www-form-urlencoded
+produces:
+- application/json
 security:
-- auth0: []
+- auth0:
+  - app:guid
 paths:
   /guid:
     get:
@@ -47,6 +54,285 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/Guid'
+  /root:
+    parameters:
+    - $ref: '#/parameters/IfMatch'
+    - $ref: '#/parameters/IfNoneMatch'
+    - $ref: '#/parameters/IfUnmodifiedSince'
+    get:
+      tags: [RootContainer]
+      operationId: IndexRootContainer
+      summary: Browse the root container
+      parameters:
+      - $ref: '#/parameters/IfModifiedSince'
+      - $ref: '#/parameters/Page'
+      - $ref: '#/parameters/Limit'
+      - $ref: '#/parameters/Sort'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidContainer'
+          examples:
+            application/json:
+              uri: https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+              guid: e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+              parents:
+                _metadata:
+                  page: 1
+                  perPage: 10
+                  pageCount: 1
+                  totalCount: 1
+                  links:
+                    self: https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539/parents?page=1&limit=10
+                items:
+                - uri: https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+                  type: GuidContainer
+                  lastModified: '2018-01-01T23:23:23.999Z'
+                  key: e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+                  etag: R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P
+                  metadata: {}
+              etag: R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P
+              created: '2017-12-01T00:00:00.000Z'
+              lastModified: '2018-01-01T23:23:23.999Z'
+              type: GuidContainer
+              metadata: {}
+              _metadata:
+                page: 1
+                perPage: 10
+                pageCount: 1
+                totalCount: 2
+                links:
+                  self: https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539?page=1&limit=10
+              items:
+              - uri: https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173
+                type: GuidGroup
+                lastModified: '2018-01-01T23:23:23.999Z'
+                metadata:
+                  displayName: Admin
+                key: 30ebb8c5-23ba-4848-a908-91b3afb74173
+                etag: itMj4525s1fqrSFkK4QnKLnYEtVvKED1Nz0l
+              - uri: https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4
+                type: GuidUser
+                lastModified: '2018-01-01T23:23:23.999Z'
+                metadata:
+                  displayName: Admin
+                key: 3bf5dc99-7152-4d85-8139-39d1a11abbc4
+                etag: 8lMq9IAkg7IocvCjLo7QPUqtW3F9I4FLKgLm
+  /root/create/container:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanContainer
+      summary: Create an orphaned container
+      parameters:
+      - in: body
+        name: container
+        required: true
+        schema:
+          $ref: '#/definitions/GuidContainer'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidContainer'
+  /root/create/document:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanDocument
+      summary: Create an orphaned document
+      parameters:
+      - in: body
+        name: document
+        required: true
+        schema:
+          $ref: '#/definitions/GuidDocument'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidDocument'
+  /root/create/blob:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanBlob
+      summary: Create an orphaned blob
+      consumes:
+      - multipart/form-data
+      parameters:
+      - in: formData
+        name: filename
+        type: string
+      - in: formData
+        name: contentType
+        type: string
+      - in: formData
+        name: encoding
+        type: string
+      - in: formData
+        name: hash
+        type: string
+        format: byte
+        required: true
+      - in: formData
+        name: hashType
+        type: string
+        required: true
+        enum:
+        - md5
+        - sha1
+        - sha256
+        - sha512
+      - in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidBlob'
+  /root/create/link:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanLink
+      summary: Create an orphaned link
+      parameters:
+      - in: body
+        name: link
+        required: true
+        schema:
+          $ref: '#/definitions/GuidLink'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidLink'
+  /root/create/service:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanService
+      summary: Create an orphaned service actor
+      parameters:
+      - in: body
+        name: service
+        required: true
+        schema:
+          $ref: '#/definitions/GuidService'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidService'
+  /root/create/group:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanGroup
+      summary: Created an orphaned group
+      parameters:
+      - in: body
+        name: group
+        required: true
+        schema:
+          $ref: '#/definitions/GuidGroup'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidGroup'
+          examples:
+            application/json:
+              uri: https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173
+              guid: 30ebb8c5-23ba-4848-a908-91b3afb74173
+              parents:
+                _metadata:
+                  page: 1
+                  perPage: 10
+                  pageCount: 1
+                  totalCount: 1
+                  links:
+                    self: https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173/parents?page=1&limit=10
+                items:
+                - uri: https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+                  type: GuidContainer
+                  lastModified: '2018-01-01T23:23:23.999Z'
+                  key: e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+                  etag: R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P
+                  metadata: {}
+              etag: itMj4525s1fqrSFkK4QnKLnYEtVvKED1Nz0l
+              created: '2017-12-01T00:00:00.000Z'
+              lastModified: '2018-01-01T23:23:23.999Z'
+              type: GuidGroup
+              metadata:
+                displayName: Admin
+              status: Active
+              _metadata:
+                page: 1
+                perPage: 10
+                pageCount: 1
+                totalCount: 1
+                links:
+                  self: https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173?page=1&limit=10
+              items:
+              - uri: https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4
+                type: GuidUser
+                lastModified: '2018-01-01T23:23:23.999Z'
+                metadata:
+                  displayName: Admin
+                key: 3bf5dc99-7152-4d85-8139-39d1a11abbc4
+                etag: 8lMq9IAkg7IocvCjLo7QPUqtW3F9I4FLKgLm
+                status: Active
+  /root/create/user:
+    post:
+      tags: [RootContainer]
+      operationId: CreateOrphanUser
+      summary: Create an orphaned user
+      parameters:
+      - in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/GuidUser'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/GuidUser'
+          examples:
+            application/json:
+              uri: https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4
+              guid: 3bf5dc99-7152-4d85-8139-39d1a11abbc4
+              parents:
+                _metadata:
+                  page: 1
+                  perPage: 10
+                  pageCount: 1
+                  totalCount: 2
+                  links:
+                    self: https://guid.cc/3bf5dc99-7152-4d85-8139-39d1a11abbc4/parents?page=1&limit=10
+                items:
+                - uri: https://guid.cc/e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+                  type: GuidContainer
+                  lastModified: '2018-01-01T23:23:23.999Z'
+                  key: e7c50bcc-0866-4fc2-a7f0-b49278a6b539
+                  etag: R4DTGFxxP5ZkdYjw8nCEUdTAj30exMpcnm9P
+                  metadata: {}
+                - uri: https://guid.cc/30ebb8c5-23ba-4848-a908-91b3afb74173
+                  type: GuidGroup
+                  lastModified: '2018-01-01T23:23:23.999Z'
+                  metadata:
+                    displayName: Admin
+                  key: 30ebb8c5-23ba-4848-a908-91b3afb74173
+                  etag: itMj4525s1fqrSFkK4QnKLnYEtVvKED1Nz0l
+              etag: 8lMq9IAkg7IocvCjLo7QPUqtW3F9I4FLKgLm
+              created: '2017-12-01T00:00:00.000Z'
+              lastModified: '2018-01-01T23.23.23.999Z'
+              type: GuidUser
+              metadata:
+                displayName: Admin
+              status: Active
+              emailAddress: contact@leblanc.codes
+              secrets:
+                foo: really secret bar
   /store:
     post:
       tags: [KeyValueStore]
@@ -621,7 +907,7 @@ definitions:
   ItemIndex:
     type: object
     properties:
-      metadata:
+      _metadata:
         $ref: '#/definitions/IndexMetadata'
       items:
         type: array
@@ -630,7 +916,7 @@ definitions:
   ObjectIndex:
     type: object
     properties:
-      metadata:
+      _metadata:
         $ref: '#/definitions/IndexMetadata'
       items:
         type: array
@@ -639,7 +925,7 @@ definitions:
   ActorIndex:
     type: object
     properties:
-      metadata:
+      _metadata:
         $ref: '#/definitions/IndexMetadata'
       items:
         type: array
@@ -758,7 +1044,9 @@ definitions:
         guid:
           $ref: '#/definitions/Guid'
         parents:
-          $ref: '#/definitions/ActorIndex'
+          allOf:
+          - readOnly: true
+          - $ref: '#/definitions/ObjectIndex'
         etag:
           type: string
         created:
@@ -876,6 +1164,7 @@ definitions:
         metrics:
           $ref: '#/definitions/LinkMetrics'
   LinkMetrics:
+    readOnly: true
     allOf:
     - $ref: '#/definitions/DirectInwardEntity'
     - type: object
@@ -968,6 +1257,7 @@ definitions:
         type: string
   ActorStatus:
     type: string
+    readOnly: true
     description: >
       ActorStatus:
       * `AwaitingRegistration` - new actor status, used when creating new actors
@@ -1005,6 +1295,7 @@ definitions:
       properties:
         accessTokens:
           type: array
+          readOnly: true
           items:
             $ref: '#/definitions/AccessToken'
   AccessToken:
@@ -1026,7 +1317,7 @@ definitions:
   GuidGroup:
     allOf:
     - $ref: '#/definitions/GuidActor'
-    - $ref: '#/definitions/ObjectIndex'
+    - $ref: '#/definitions/ActorIndex'
   GuidUser:
     allOf:
     - $ref: '#/definitions/GuidActor'
