@@ -262,6 +262,10 @@ paths:
               created: '2017-12-01T00:00:00.000Z'
               lastModified: '2018-01-01T23:23:23.999Z'
               type: GuidGroup
+              profile:
+                name: Admins
+                description: The admins
+                publicAttribute: true
               metadata:
                 displayName: Admin
               status: Active
@@ -329,6 +333,9 @@ paths:
               type: GuidUser
               metadata:
                 displayName: Admin
+              profile:
+                name: Admin
+                description: The admin
               status: Active
               emailAddress: contact@leblanc.codes
               secrets:
