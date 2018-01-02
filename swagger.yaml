@@ -33,11 +33,17 @@ paths:
       operationId: NewVersion4Guid
       summary: Get a new version 4 uuid
       security: []
+      produces:
+      - text/plain
+      - application/json
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/Guid'
+          examples:
+            text/plain: d116807d-794d-4995-9ebc-252d31301869
+            application/json: '"d116807d-794d-4995-9ebc-252d31301869"'
     post:
       tags: [GuidGenerator]
       operationId: NewGuid
@@ -49,11 +55,17 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/NewGuidRequest'
+      produces:
+      - text/plain
+      - application/json
       responses:
         200:
           description: OK
           schema:
             $ref: '#/definitions/Guid'
+          examples:
+            text/plain: d116807d-794d-4995-9ebc-252d31301869
+            application/json: '"d116807d-794d-4995-9ebc-252d31301869"'
   /root:
     parameters:
     - $ref: '#/parameters/IfMatch'
@@ -340,22 +352,6 @@ paths:
               emailAddress: contact@leblanc.codes
               secrets:
                 foo: really secret bar
-  /store:
-    post:
-      tags: [KeyValueStore]
-      operationId: AddNewObjectRandomKey
-      summary: Add a new object, assign a random key
-      parameters:
-      - in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/GuidObject'
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: '#/definitions/GuidObject'
   /{guid}:
     parameters:
     - $ref: '#/parameters/ResourceKey'
